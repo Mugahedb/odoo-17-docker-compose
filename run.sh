@@ -2,6 +2,7 @@
 DESTINATION=$1
 PORT=$2
 CHAT=$3
+ENVIRONMENT=$4  # New parameter to specify prod or test
 
 # Clone Odoo directory
 git clone --depth=1 https://github.com/minhng92/odoo-17-docker-compose $DESTINATION
@@ -37,6 +38,18 @@ else
   # Linux sed syntax
   sed -i 's/10017/'$PORT'/g' $DESTINATION/docker-compose.yml
   sed -i 's/20017/'$CHAT'/g' $DESTINATION/docker-compose.yml
+fi
+
+# Modify service names dynamically based on the environment (prod or test)
+if [[ "$ENVIRONMENT" == "prod" ]]; then
+  sed -i 's/db:$/db-prod:/g' $DESTINATION/docker-compose.yml
+  sed -i 's/odoo17:/odoo17-prod:/g' $DESTINATION/docker-compose.yml
+elif [[ "$ENVIRONMENT" == "test" ]]; then
+  sed -i 's/db:$/db-test:/g' $DESTINATION/docker-compose.yml
+  sed -i 's/odoo17:/odoo17-test:/g' $DESTINATION/docker-compose.yml
+else
+  echo "Invalid environment. Please specify 'prod' or 'test'."
+  exit 1
 fi
 
 # Set file and directory permissions after installation
