@@ -45,10 +45,12 @@ if [[ "$ENVIRONMENT" == "prod" ]]; then
   sed -i 's/db:$/db-prod:/g' $DESTINATION/docker-compose.yml
   sed -i 's/odoo17:/odoo17-prod:/g' $DESTINATION/docker-compose.yml
   sed -i 's/depends_on:\s*\[\s*db\s*\]/depends_on:\n      - db-prod/g' $DESTINATION/docker-compose.yml
+  sed -i 's/HOST=db/HOST=db-prod/g' $DESTINATION/docker-compose.yml
 elif [[ "$ENVIRONMENT" == "test" ]]; then
   sed -i 's/db:$/db-test:/g' $DESTINATION/docker-compose.yml
   sed -i 's/odoo17:/odoo17-test:/g' $DESTINATION/docker-compose.yml
   sed -i 's/depends_on:\s*\[\s*db\s*\]/depends_on:\n      - db-test/g' $DESTINATION/docker-compose.yml
+  sed -i 's/HOST=db/HOST=db-test/g' $DESTINATION/docker-compose.yml
 else
   echo "Invalid environment. Please specify 'prod' or 'test'."
   exit 1
